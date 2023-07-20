@@ -10,7 +10,7 @@ from flask_ckeditor import CKEditor
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
- 
+import psycopg2
 
 #create a flask instances
 app = Flask(__name__)
