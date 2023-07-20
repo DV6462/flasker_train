@@ -18,7 +18,8 @@ app = Flask(__name__)
 ckeditor = CKEditor(app)
 #-------------------old-SQLite DB (users)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qpglniesknrvfh:2dac6eaa98418a046cecb0223bcdfe6ac7354c4ca6f215788d6a75a56b53c966@ec2-52-205-45-222.compute-1.amazonaws.com:5432/da44nf2uibpael'
+#這是heroku第一個環境變數:app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qpglniesknrvfh:2dac6eaa98418a046cecb0223bcdfe6ac7354c4ca6f215788d6a75a56b53c966@ec2-52-205-45-222.compute-1.amazonaws.com:5432/da44nf2uibpael'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://bswridunapulii:f74c3cba989456febcc05707e4fb5e2be90094c83bef26b04a568e4d09f043e0@ec2-52-205-45-222.compute-1.amazonaws.com:5432/df7ahhaqio359j'
 #-------------------new MYSQL DB (our_user)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Cable360224@localhost/our_users' 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qpglniesknrvfh:2dac6eaa98418a046cecb0223bcdfe6ac7354c4ca6f215788d6a75a56b53c966@ec2-52-205-45-222.compute-1.amazonaws.com:5432/da44nf2uibpael'
