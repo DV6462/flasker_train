@@ -21,9 +21,10 @@ ckeditor = CKEditor(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qpglniesknrvfh:2dac6eaa98418a046cecb0223bcdfe6ac7354c4ca6f215788d6a75a56b53c966@ec2-52-205-45-222.compute-1.amazonaws.com:5432/da44nf2uibpael'
 #-------------------new MYSQL DB (our_user)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Cable360224@localhost/our_users' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qpglniesknrvfh:2dac6eaa98418a046cecb0223bcdfe6ac7354c4ca6f215788d6a75a56b53c966@ec2-52-205-45-222.compute-1.amazonaws.com:5432/da44nf2uibpael'
 
-app.config['SECRET_KEY']= "my supa soldia" #secret key
-
+#secret key-------------------------------
+app.config['SECRET_KEY']= "my supa soldia" 
 UPLOAD_FOLDER = "static/images"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
