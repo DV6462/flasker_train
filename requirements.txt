@@ -24,7 +24,7 @@ protobuf==3.20.3
 psycopg2==2.9.1
 pycparser==2.21
 #PyMySQL==1.1.0
-SQLAlchemy==1.4.18
+#SQLAlchemy==1.4.18
 typing-extensions==4.7.1
 Werkzeug==2.3.6
 WTForms==3.0.1
