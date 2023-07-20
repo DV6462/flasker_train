@@ -30,5 +30,5 @@ Werkzeug==2.3.6
 WTForms==3.0.1
 zipp==3.15.0
 #python==3.9.13
-psycopg2-binary==2.9.1
-pg8000==1.19.5
+#psycopg2-binary==2.9.1
+#pg8000==1.19.5
