@@ -1,16 +1,21 @@
-<h1>Hello</h1>
-<p>This is my first webpage and I am {{  first_name  }}</p>
-<p>Isn't this cool?</p>
-<p>{{  stuff_index|capitalize  }}</p>
-<h2>Favorite Pizza :</h2>
-{% for i in favorite_pizza %}
-    {% if i == 66 %}
-        {{i+6600}}
-    {% else %}
-        <p>Monday let me broken</p>
+{% extends 'base.html' %}
 
-    {%endif%}
-    <br/>
-{% endfor %}
-<br/><br/>
-{{  favorite_pizza|capitalize }}
+{% block content %}
+    <h1>Hello</h1>
+    <p>This is my first webpage and I am {{  first_name  }}</p>
+    <p>Isn't this cool?</p>
+    <p>{{  stuff_index|capitalize  }}</p>
+    <h2>Favorite Pizza :</h2>
+    {% for i in favorite_pizza %}
+        {% if i == 66 %}
+            {{i+6600}}
+        {% else %}
+            <p>Monday let me broken</p>
+
+        {%endif%}
+        <br/>
+    {% endfor %}
+    <br/><br/>
+    {{  favorite_pizza|capitalize }}
+    
+{% endblock %}
