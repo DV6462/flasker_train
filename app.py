@@ -388,7 +388,7 @@ class Users(db.Model, UserMixin):
     password_hash = PasswordField()
     password_hash2 = PasswordField() 
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
-    profile_pic = db.Column(db.String(500), nullable=True)
+    profile_pic = db.Column(db.String(), nullable=True)
     #Doing some password stuff
     password_hash = db.Column(db.String(128))
     #Users can have many Posts
