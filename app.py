@@ -10,7 +10,7 @@ from flask_ckeditor import CKEditor
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
-import psycopg2
+
 
 #create a flask instances
 app = Flask(__name__)
@@ -19,8 +19,8 @@ ckeditor = CKEditor(app)
 #-------------------old-SQLite DB (users)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 #-------------------new MYSQL DB (our_user)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Cable360224@localhost/our_users' 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://jxwyrzntznmgea:c70bd233b264ad7a650f5e06b4e3aa859ffe99c80fe41fc3b893d12a2e6db0c0@ec2-34-236-199-229.compute-1.amazonaws.com:5432/daehgh3q6l9hlo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Cable360224@localhost/our_users' 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://jxwyrzntznmgea:c70bd233b264ad7a650f5e06b4e3aa859ffe99c80fe41fc3b893d12a2e6db0c0@ec2-34-236-199-229.compute-1.amazonaws.com:5432/daehgh3q6l9hlo'
 
 #secret key-------------------------------
 app.config['SECRET_KEY']= "my supa soldia" 
@@ -106,33 +106,39 @@ def dashboard():
         name_to_update.favorite_color = request.form['favorite_color']
         name_to_update.username = request.form['username']
         name_to_update.about_author = request.form['about_author']
-        name_to_update.profile_pic = request.files['profile_pic']
         
         
+        #check for profile pic
+        if request.files['profile_pic']:
+            name_to_update.profile_pic = request.files['profile_pic']
         
         
-        # Grab Image Name
-        pic_filename = secure_filename(name_to_update.profile_pic.filename)
-        # Set UUID 輸入檔案撞名就給予編號
-        pic_name = str(uuid.uuid1()) + "-" + pic_filename
-        #Save That Image
-        saver = request.files['profile_pic']
-        
-        #change it to a string to save to db
-        name_to_update.profile_pic = pic_name
-        try:
+            # Grab Image Name
+            pic_filename = secure_filename(name_to_update.profile_pic.filename)
+            # Set UUID 輸入檔案撞名就給予編號
+            pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            #Save That Image
+            saver = request.files['profile_pic']
+            
+            #change it to a string to save to db
+            name_to_update.profile_pic = pic_name
+            try:
+                db.session.commit()
+                saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                flash("User Updated Successfully")
+                return render_template("dashboard.html", form=form, name_to_update=name_to_update)
+            except:
+                flash("Error!! Got some problem, try again Please~")
+                return render_template("dashboard.html", form=form, name_to_update=name_to_update)
+        else:
             db.session.commit()
-            saver.save(os.path.join(app.config['UPLOAD_FOLDER']), pic_name)
             flash("User Updated Successfully")
-            return render_template("dashboard.html", form=form, name_to_update=name_to_update)
-        except:
-            flash("Error!! Got some problem, try again Please~")
             return render_template("dashboard.html", form=form, name_to_update=name_to_update)
     else:
         return render_template("dashboard.html", form=form, name_to_update=name_to_update, id=id)
     
     
-    return render_template("dashboard.html")
+    #return render_template("dashboard.html")
 #-------------------Create logout Page
 @app.route('/logout', methods=['GET','POST'])
 @login_required
@@ -157,7 +163,7 @@ def get_current_date():
 def delete_post(id):
     post_to_delete = Posts.query.get_or_404(id)
     id = current_user.id
-    if id == post_to_delete.poster.id:
+    if id == post_to_delete.poster.id or id==13:
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
@@ -209,7 +215,7 @@ def edit_post(id):
         flash("Post Has Been Updated!")
         return redirect(url_for("post", id=post.id))
     
-    if current_user.id == post.poster_id:
+    if current_user.id == post.poster_id or current_user.id == 13:
         form.title.data = post.title
         #form.author.data = post.author
         form.slug.data = post.slug
@@ -249,20 +255,26 @@ def add_post():
 
 #delete record
 @app.route('/delete/<int:id>')
+@login_required
 def delete(id):
-    user_to_delete = Users.query.get_or_404(id)
-    name = None
-    form = UserForm()
+    if id == current_user.id:
+        
+        user_to_delete = Users.query.get_or_404(id)
+        name = None
+        form = UserForm()
     
-    try:
-        db.session.delete(user_to_delete)
-        db.session.commit()
-        flash('User Deleted Successfylly')
-        our_users=Users.query.order_by(Users.date_added)
-        return render_template("add_user.html", form=form, name=name, our_users=our_users)
-    except:
-        flash("THere is a problem happened")
-        return render_template("add_user.html",form=form , name=name, our_user=our_users)
+        try:
+            db.session.delete(user_to_delete)
+            db.session.commit()
+            flash('User Deleted Successfylly')
+            our_users=Users.query.order_by(Users.date_added)
+            return render_template("add_user.html", form=form, name=name, our_users=our_users)
+        except:
+            flash("THere is a problem happened")
+            return render_template("add_user.html",form=form , name=name, our_user=our_users)
+    else:
+        flash("You can't delete that user")
+        return redirect(url_for('dashboard'))
         
 #update database record
 @app.route('/update/<int:id>', methods=['GET','POST'])
